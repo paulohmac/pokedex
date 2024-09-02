@@ -2,6 +2,7 @@ import UIKit
 
 public struct Pokemon: Codable,Identifiable {
     public var id = UUID()
+    var apiId: Int? = 0
     let name: String
     let sprites: Sprites?
     let stats: [Stat]?
@@ -16,6 +17,7 @@ public struct Pokemon: Codable,Identifiable {
     }
     
     enum CodingKeys: String, CodingKey {
+        case apiId = "id"
         case sprites
         case name
         case stats
@@ -59,6 +61,7 @@ public struct SearchResult: Codable {
 
 struct SearchResultItem: Codable,Identifiable {
     let id = UUID()
+    var apiId: String? = ""
     let name: String
     let url: String
     var pokemonData : Pokemon?
@@ -73,9 +76,15 @@ struct SearchResultItem: Codable,Identifiable {
             }
             return ret
         }
-//    https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png
+
     }
-    
+
+    enum CodingKeys: String, CodingKey {
+        case apiId = "id"
+        case name = "name"
+        case url = "url"
+    }
+
     func parseCode() -> String{
         var ret = ""
         if url != ""{

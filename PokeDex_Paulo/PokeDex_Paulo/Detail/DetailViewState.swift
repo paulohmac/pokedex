@@ -7,6 +7,7 @@ class DetailViewState: ObservableObject {
     @Published var sprit: String = ""
     @Published var name: String = ""
     @Published var stats: [Stat] = []
+    @Published var code: String = ""
 
     init(_ id: String){
         self.id = id
@@ -30,6 +31,7 @@ class DetailViewState: ObservableObject {
         self.name = pokemonData?.name  ?? ""
         self.sprit = pokemonData?.sprites?.frontDefault  ?? ""
         self.stats = pokemonData?.filterStats ?? []
+        self.code = String(pokemonData?.apiId ?? 0)
     }
     
     

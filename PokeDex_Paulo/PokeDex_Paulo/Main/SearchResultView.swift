@@ -16,8 +16,8 @@ struct SearchResultView: View {
             ScrollViewReader { proxy in
                 ScrollView(.vertical){
                     LazyVGrid(
-                        columns: [GridItem(spacing: 2), GridItem(spacing: 2)],
-                        spacing: 8
+                        columns: [GridItem(spacing: 1), GridItem(spacing: 1)],
+                        spacing: 2
                     )  {
                         ForEach(pokemonList) { pokemon in
                             VStack {
@@ -40,7 +40,7 @@ struct SearchResultView: View {
                                 .indicator(.activity) // Activity Indicator
                                 .transition(.fade(duration: 0.5)) // Fade Transition with duration
                                 .scaledToFit()
-                                .frame(width: 60, height: 60, alignment: .center)
+                                .frame(width: .infinity, height: 60, alignment: .center)
                                 .padding(.top, -16)
                                 
                                 
