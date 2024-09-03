@@ -3,8 +3,26 @@ import SwiftUI
 class MainViewState: ObservableObject {
     private var service: PokeAPIService = PokeAPIHTTPService()
     private var currentPage = -1
+
     @Published var filter  = ""
     @Published var pokemonList  = [SearchResultItem]()
+    @Published var searchTerm = ""
+    @Published var hiddenLoading = 0.0
+    @Published var hasError = false
+    @Published var errorMessage = "houve uma falha"
+
+    @Published var showLoading  = false {
+        willSet(newValue){
+            hiddenLoading = newValue ? 1.0 : 0.0
+            print("***\(hiddenLoading)")
+        }
+    }
+
+    @Published var changePage = false {
+        willSet(newValue){
+            nextPage()
+        }
+    }
     @Published var enterpressed  = false {
         willSet(newValue){
             if newValue {
@@ -12,22 +30,10 @@ class MainViewState: ObservableObject {
             }
         }
     }
-    @Published var searchTerm = ""
-
-    @Published var changePage = false {
-        willSet(newValue){
-            nextPage()
-        }
-    }
-
-
-    
-    @Published var selectedType : String = "Normal" {
-        willSet(newValue){
-            if selectedType != "" {
-                self.pokemonList.removeAll()
-                listByType(newValue.lowercased())
-            }
+    @Published var currentSelection: PokemonType = .normal {
+        didSet(newValue){
+            self.pokemonList.removeAll()
+            listByType(newValue.rawValue.lowercased())
         }
     }
     
@@ -35,49 +41,58 @@ class MainViewState: ObservableObject {
     }
     
     private func searchPokemon(_ term: String) {
-        guard term.count > 0 else{
-            return
+        if term.count == 0 {
+            currentPage = -1
+            nextPage()
+        }else{
+            search(term)
+            enterpressed = false
         }
-        search(term)
-        enterpressed = false
+            
     }
     
     private func search(_ term: String) {
-        service.perfomrSearch(search: .search(param: term.lowercased()),completion: { result in
+        showLoading = true
+        service.search(search: .search(param: term.lowercased()),completion: { result in
+            self.showLoading = false
             switch result {
             case .success(let pokemonRetList):
                 self.pokemonList = pokemonRetList.results ?? []
             case .failure(let error):
                 print(error)
-//                showError(error: error)
+                self.showError(error: error)
             }
         })
     }
 
+    
     private func list() {
-        service.perfomrList(search: .list(param: String(currentPage)),completion: { result in
+        showLoading = true
+        service.search(search: .list(param: String(currentPage)),completion: { result in
+            self.showLoading = false
             switch result {
             case .success(let pokemonRetList):
                 self.pokemonList += pokemonRetList.results ?? []
             case .failure(let error):
                 print(error)
-//                showError(error: error)
+                self.showError(error: error)
             }
         })
     }
 
     private func listByType(_ type: String) {
-        service.perfomrListByType(search: .listbyType(type: type),completion: { result in
+        showLoading = true
+        service.search(search: .listbyType(type: type),completion: { result in
+            self.showLoading = false
             switch result {
             case .success(let pokemonRetList):
                 self.pokemonList += pokemonRetList.results ?? []
             case .failure(let error):
                 print(error)
-//                showError(error: error)
+                self.showError(error: error)
             }
         })
     }
-
 
     public func nextPage(){
         currentPage += 1
@@ -92,10 +107,13 @@ class MainViewState: ObservableObject {
         }
         self.list()
     }
-
     
     public func showError(error : Error){
-//        errorHadling?.showError(msg: error)
+        self.hasError = true
+        let errorMesage = error.localizedDescription
+        self.errorMessage = errorMesage == "" ? "Houve um erro" : errorMesage
         print(error)
     }
 }
+
+

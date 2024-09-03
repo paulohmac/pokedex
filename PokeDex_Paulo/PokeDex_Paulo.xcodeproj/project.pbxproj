@@ -14,6 +14,10 @@
 		8C9A2C9F2C7F94750042328B /* pokemon-emerald.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C9A2C9E2C7F94750042328B /* pokemon-emerald.ttf */; };
 		8C9A2CA22C7FC0B00042328B /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9A2CA12C7FC0B00042328B /* UIColor+Extension.swift */; };
 		8C9A2CA42C822C1F0042328B /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9A2CA32C822C1E0042328B /* UIImage+Extension.swift */; };
+		8CA7B8572C86703B00107F7D /* PokemonTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA7B8562C86703B00107F7D /* PokemonTypes.swift */; };
+		8CA7B85A2C8697B500107F7D /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA7B8592C8697B500107F7D /* Header.swift */; };
+		8CA7B85C2C86A5F700107F7D /* FullScreenVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA7B85B2C86A5F700107F7D /* FullScreenVideo.swift */; };
+		8CA7B85F2C86AAA900107F7D /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8CA7B85E2C86AAA900107F7D /* Localizable.xcstrings */; };
 		8CB4AECC2C7A58D30006FD09 /* PokeDex_PauloApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB4AECB2C7A58D30006FD09 /* PokeDex_PauloApp.swift */; };
 		8CB4AECE2C7A58D30006FD09 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB4AECD2C7A58D30006FD09 /* ContentView.swift */; };
 		8CB4AED02C7A58D60006FD09 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8CB4AECF2C7A58D60006FD09 /* Assets.xcassets */; };
@@ -59,6 +63,10 @@
 		8C9A2CA02C7F95E00042328B /* PokeDex-Paulo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "PokeDex-Paulo-Info.plist"; sourceTree = SOURCE_ROOT; };
 		8C9A2CA12C7FC0B00042328B /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		8C9A2CA32C822C1E0042328B /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		8CA7B8562C86703B00107F7D /* PokemonTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonTypes.swift; sourceTree = "<group>"; };
+		8CA7B8592C8697B500107F7D /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
+		8CA7B85B2C86A5F700107F7D /* FullScreenVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenVideo.swift; sourceTree = "<group>"; };
+		8CA7B85E2C86AAA900107F7D /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		8CB4AEC82C7A58D30006FD09 /* PokeDex_Paulo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PokeDex_Paulo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CB4AECB2C7A58D30006FD09 /* PokeDex_PauloApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokeDex_PauloApp.swift; sourceTree = "<group>"; };
 		8CB4AECD2C7A58D30006FD09 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -124,6 +132,14 @@
 			path = fonts;
 			sourceTree = "<group>";
 		};
+		8CA7B8582C86978200107F7D /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				8CA7B8592C8697B500107F7D /* Header.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		8CB4AEBF2C7A58D30006FD09 = {
 			isa = PBXGroup;
 			children = (
@@ -148,7 +164,9 @@
 		8CB4AECA2C7A58D30006FD09 /* PokeDex_Paulo */ = {
 			isa = PBXGroup;
 			children = (
+				8CA7B85E2C86AAA900107F7D /* Localizable.xcstrings */,
 				8C9A2CA02C7F95E00042328B /* PokeDex-Paulo-Info.plist */,
+				8CA7B8582C86978200107F7D /* Components */,
 				8C9A2C9D2C7F94510042328B /* fonts */,
 				8C9A2C9A2C7EAA510042328B /* Video */,
 				8CB4AF062C7AAAEA0006FD09 /* Extensions */,
@@ -205,6 +223,7 @@
 				8CB4AEF72C7A5B450006FD09 /* MainViewState.swift */,
 				8CB4AEF52C7A59890006FD09 /* MainView.swift */,
 				8CF5CF742C7B8DB000918229 /* SearchResultView.swift */,
+				8CA7B85B2C86A5F700107F7D /* FullScreenVideo.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -238,6 +257,7 @@
 		8CF5CF762C7CFD1500918229 /* Detail */ = {
 			isa = PBXGroup;
 			children = (
+				8CA7B8562C86703B00107F7D /* PokemonTypes.swift */,
 				8CF5CF772C7CFD4200918229 /* DetailView.swift */,
 				8C9A2C982C7E4AB60042328B /* DetailViewState.swift */,
 			);
@@ -341,6 +361,7 @@
 				8CB4AEF92C7A5F3C0006FD09 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				8CB4AEFD2C7A61110006FD09 /* XCRemoteSwiftPackageReference "Moya" */,
 				8C9A2CA52C825CCF0042328B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				8CA7B85D2C86A6F100107F7D /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 			);
 			productRefGroup = 8CB4AEC92C7A58D30006FD09 /* Products */;
 			projectDirPath = "";
@@ -359,6 +380,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8CB4AED32C7A58D60006FD09 /* Preview Assets.xcassets in Resources */,
+				8CA7B85F2C86AAA900107F7D /* Localizable.xcstrings in Resources */,
 				8C9A2C9C2C7EAA730042328B /* pokemon-ash.mp4 in Resources */,
 				8CB4AED02C7A58D60006FD09 /* Assets.xcassets in Resources */,
 				8C9A2C9F2C7F94750042328B /* pokemon-emerald.ttf in Resources */,
@@ -394,12 +416,15 @@
 				8CB4AEFC2C7A5FC50006FD09 /* PokeAPIService.swift in Sources */,
 				8CF5CF782C7CFD4200918229 /* DetailView.swift in Sources */,
 				8CB4AEFF2C7A68FB0006FD09 /* PokeAPIMoyaTarget.swift in Sources */,
+				8CA7B85A2C8697B500107F7D /* Header.swift in Sources */,
 				8C9A2C992C7E4AB60042328B /* DetailViewState.swift in Sources */,
 				8CB4AF012C7A69260006FD09 /* PokeAPIConfiguration.swift in Sources */,
 				8CB4AF052C7A6D210006FD09 /* Pokemon.swift in Sources */,
+				8CA7B8572C86703B00107F7D /* PokemonTypes.swift in Sources */,
 				8C9A2CA22C7FC0B00042328B /* UIColor+Extension.swift in Sources */,
 				8CB4AEF82C7A5B450006FD09 /* MainViewState.swift in Sources */,
 				8C73029B2C850B3B00AAE7BB /* String+Extension.swift in Sources */,
+				8CA7B85C2C86A5F700107F7D /* FullScreenVideo.swift in Sources */,
 				8CF5CF752C7B8DB000918229 /* SearchResultView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -738,6 +763,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 3.0.0;
+			};
+		};
+		8CA7B85D2C86A6F100107F7D /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.12.0;
 			};
 		};
 		8CB4AEF92C7A5F3C0006FD09 /* XCRemoteSwiftPackageReference "Alamofire" */ = {

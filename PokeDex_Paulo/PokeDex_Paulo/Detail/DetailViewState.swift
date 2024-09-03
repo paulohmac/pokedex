@@ -8,7 +8,10 @@ class DetailViewState: ObservableObject {
     @Published var name: String = ""
     @Published var stats: [Stat] = []
     @Published var code: String = ""
-
+    @Published var viewBackgroundColor: String = ""
+    @Published var hasError = false
+    @Published var errorMessage = "houve uma falha"
+    
     init(_ id: String){
         self.id = id
         loadPokemonData(id)
@@ -22,7 +25,7 @@ class DetailViewState: ObservableObject {
                 self.setData()
             case .failure(let error):
                 print(error)
-//                showError(error: error)
+                self.showError(error: error)
             }
         })
     }
@@ -32,11 +35,13 @@ class DetailViewState: ObservableObject {
         self.sprit = pokemonData?.sprites?.frontDefault  ?? ""
         self.stats = pokemonData?.filterStats ?? []
         self.code = String(pokemonData?.apiId ?? 0)
+        self.viewBackgroundColor = pokemonTypeColors[pokemonData?.types?[0].type?.name.firstCapitalized ?? ""] ?? ""
     }
     
-    
     public func showError(error : Error){
-//        errorHadling?.showError(msg: error)
+        self.hasError = true
+        let errorMesage = error.localizedDescription
+        self.errorMessage = errorMesage == "" ? "Houve um erro" : errorMesage
         print(error)
     }
 }

@@ -1,0 +1,41 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "#%@" : {
+
+    },
+    "back" : {
+      "extractionState" : "manual"
+    },
+    "Hello, world!" : {
+
+    },
+    "Ok" : {
+
+    },
+    "Paulo Pokedex" : {
+
+    },
+    "Pokemon type:" : {
+
+    },
+    "search" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "type pokemon name or number"
+          }
+        }
+      }
+    },
+    "Stats" : {
+
+    }
+  },
+  "version" : "1.0"
+}

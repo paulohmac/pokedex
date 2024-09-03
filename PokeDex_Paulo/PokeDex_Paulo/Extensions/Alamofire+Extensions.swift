@@ -54,3 +54,22 @@ extension MoyaProvider {
 
 }
 
+public enum RequestResult {
+    case success(codable : Codable)
+    case error(error : Error)
+}
+
+struct ResponseError: Error {
+    ///Http Codes mapping
+    enum ApiHTTPCodes : Int {
+        case invalidToken        = 401   //Status code 403
+        case accessDenied        = 402   //Status code 403
+        case forbidden           = 403   //Status code 403
+        case notFound            = 404   //Status code 404
+        case conflict            = 409   //Status code 409
+        case internalServerError = 500   //Status code 500
+    }
+
+    let code: Int
+    let message: String
+}

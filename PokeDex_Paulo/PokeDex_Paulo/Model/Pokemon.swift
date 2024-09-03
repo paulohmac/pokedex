@@ -7,6 +7,7 @@ public struct Pokemon: Codable,Identifiable {
     let sprites: Sprites?
     let stats: [Stat]?
     let forms: [Form]?
+    let types: [Types]?
 
     let statsFilter = ["attack", "defense", "special-defense"]
 
@@ -22,6 +23,25 @@ public struct Pokemon: Codable,Identifiable {
         case name
         case stats
         case forms
+        case types
+    }
+}
+
+struct Types: Codable,Identifiable{
+    public var id = UUID()
+    let type: Type?
+    enum CodingKeys: String, CodingKey {
+        case type
+    }
+}
+
+struct Type: Codable,Identifiable{
+    public var id = UUID()
+    let name: String
+    let url: String
+    
+    enum CodingKeys: String, CodingKey {
+        case name, url
     }
 }
 
@@ -56,13 +76,13 @@ struct StatInfo: Codable,Identifiable {
 }
 
 public struct SearchResult: Codable {
-    let results: [SearchResultItem]?
+    var results: [SearchResultItem]?
 }
 
 struct SearchResultItem: Codable,Identifiable {
     let id = UUID()
     var apiId: String? = ""
-    let name: String
+    var name: String
     let url: String
     var pokemonData : Pokemon?
 

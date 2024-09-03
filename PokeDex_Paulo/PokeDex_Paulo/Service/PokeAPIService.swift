@@ -2,10 +2,11 @@ import Foundation
 import Moya
 
 public protocol PokeAPIService{
-    func perfomrList(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ())
-    func perfomrSearch(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ())
-    func perfomrListByType(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ())
+    //func perfomrList(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ())
+//    func perfomrSearch(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ())
+//    func perfomrListByType(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ())
     func perfomrGetDetail(search: SendRequest, completion: @escaping (Result<Pokemon, Error>) -> ())
+    func search(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ())
 }
 
 class PokeAPIHTTPService:  PokeAPIService{
@@ -15,6 +16,25 @@ class PokeAPIHTTPService:  PokeAPIService{
         })
     }
 
+    func search(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ()){
+        switch search {
+        case let .list(page):
+            self.request(target: search, retType: SearchResult.self, completion: { data in
+                completion(data)
+            })
+        case .search(param: let param):
+            self.searchPokemons(target: search, retType: SearchResult.self, completion: { data in
+                completion(data)
+            })
+        case .listbyType(type: let type):
+            self.requestByType(target: search, completion: { data in
+                completion(data)
+            })
+        default:
+            ()
+        }
+    }
+    
     func perfomrList(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ()){
         self.request(target: search, retType: SearchResult.self, completion: { data in
             completion(data)
@@ -29,7 +49,6 @@ class PokeAPIHTTPService:  PokeAPIService{
     
 
     func perfomrSearch(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ()){
-        let provider = MoyaProvider<SendRequest>(plugins: [NetworkLoggerPlugin()])
         self.searchPokemons(target: search, retType: SearchResult.self, completion: { data in
             completion(data)
         })
@@ -85,7 +104,6 @@ class PokeAPIHTTPService:  PokeAPIService{
             }
         }
        }
-
     
     private func request<T: Decodable>(target: SendRequest, retType : T.Type, completion: @escaping (Result<T, Error>) -> ()) {
         var pagePosition = "0"
@@ -127,37 +145,5 @@ class PokeAPIHTTPService:  PokeAPIService{
             }
         }
        }
-/*    private func mapReturn<T : Codable>(requestReturn : Result<Response, MoyaError>, retType : T.Type) -> RequestResult{
-        switch requestReturn {
-        case let .success(moyaResponse):
-            let statusCode = moyaResponse.statusCode
-            let data = moyaResponse.data
-            let jsonData = try! JSONDecoder().decode ( retType.self , from: data)
-            return  .success(codable: jsonData)
-        case let .failure(error):
-            print(error.localizedDescription)
-            return  .error(error: ResponseError(code: error.errorCode, message: error.errorDescription ?? ""))
-        }
-    }*/
-}
+ }
 
-public enum RequestResult {
-    case success(codable : Codable)
-    case error(error : Error)
-}
-
-
-struct ResponseError: Error {
-    ///Http Codes mapping
-    enum ApiHTTPCodes : Int {
-        case invalidToken        = 401   //Status code 403
-        case accessDenied        = 402   //Status code 403
-        case forbidden           = 403   //Status code 403
-        case notFound            = 404   //Status code 404
-        case conflict            = 409   //Status code 409
-        case internalServerError = 500   //Status code 500
-    }
-
-    let code: Int
-    let message: String
-}
