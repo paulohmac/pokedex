@@ -6,7 +6,7 @@
 - **Alamofire/Moya** for HTTP Requests
 - **XCTest** for Unit Testing
 - **SnapshotTesting** for UI Snapshot Tests
-
+- **Swift Package Manager** for dependencies manager
 ## Architecture
 
 - **MVVM** (Model-View-ViewModel) / **Reactive** Programming
@@ -34,6 +34,7 @@ Spanish version:
 - **Alamofire/Moya** para Solicitudes HTTP
 - **XCTest** para Pruebas Unitarias
 - **SnapshotTesting** para Pruebas de UI Snapshot
+- **Swift Package Manager** para la gestión de la dependencia.
 
 ## Arquitectura
 
