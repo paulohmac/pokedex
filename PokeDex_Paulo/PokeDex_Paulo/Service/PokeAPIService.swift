@@ -2,9 +2,6 @@ import Foundation
 import Moya
 
 public protocol PokeAPIService{
-    //func perfomrList(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ())
-//    func perfomrSearch(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ())
-//    func perfomrListByType(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ())
     func perfomrGetDetail(search: SendRequest, completion: @escaping (Result<Pokemon, Error>) -> ())
     func search(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ())
 }
@@ -34,27 +31,7 @@ class PokeAPIHTTPService:  PokeAPIService{
             ()
         }
     }
-    
-    func perfomrList(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ()){
-        self.request(target: search, retType: SearchResult.self, completion: { data in
-            completion(data)
-        })
-    }
-    
-    func perfomrListByType(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ()){
-        self.requestByType(target: search, completion: { data in
-            completion(data)
-        })
-    }
-    
-
-    func perfomrSearch(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ()){
-        self.searchPokemons(target: search, retType: SearchResult.self, completion: { data in
-            completion(data)
-        })
-
-    }
-    
+ 
     private func searchPokemons<T: Decodable>(target: SendRequest, retType : T.Type, completion: @escaping (Result<SearchResult, Error>) -> ()) {
         var searchTerm = ""
         if case let .search(param: term) = target {
@@ -64,11 +41,20 @@ class PokeAPIHTTPService:  PokeAPIService{
         provider.request(.search(param: searchTerm)) { result in
             switch result {
             case let .success(moyaResponse):
-                let data = moyaResponse.data
-                _ = moyaResponse.statusCode
-                let jsonData = try! JSONDecoder().decode ( Pokemon.self , from: data)
-                var ret  = SearchResult(results: [SearchResultItem(name: (jsonData as? Pokemon)?.forms?.first?.name ?? "", url: (jsonData as? Pokemon)?.forms?.first?.url  ?? "", pokemonData: jsonData)])
-                completion(.success(ret))
+                let statuCode = moyaResponse.statusCode
+                do {
+                    let data = moyaResponse.data
+                    let jsonData = try JSONDecoder().decode ( Pokemon.self , from: data)
+                    let ret  = SearchResult(results: [SearchResultItem(name: (jsonData as? Pokemon)?.forms?.first?.name ?? "", url: (jsonData as? Pokemon)?.forms?.first?.url  ?? "", pokemonData: jsonData)])
+                    completion(.success(ret))
+                } catch{
+                    if statuCode == 404 {
+                        completion(.failure(ResponseError(code: 400, message: "Not found")))
+
+                    }else{
+                        completion(.failure(ResponseError(code: 500, message: "Error")))
+                    }
+                }
             case let .failure(error):
                 print(error.localizedDescription)
                 completion(.failure(error))

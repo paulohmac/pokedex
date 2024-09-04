@@ -5,7 +5,8 @@ struct DetailView: View {
     @ObservedObject var viewState: DetailViewState
     @State var backToMan = false
     @Binding var closeWindows: Bool
-
+    @Binding var pokemonTypeFilter: PokemonType
+    
     var body: some View {
         ZStack{
             backgroundShapes
@@ -18,7 +19,11 @@ struct DetailView: View {
         }
         .background((Color(hex:viewState.viewBackgroundColor)))
         .alert(isPresented: $viewState.hasError, content: {
-            Alert(title: Text(""), message: Text(viewState.errorMessage), dismissButton: .default(Text("Ok")))
+            Alert(
+                title: Text(""),
+                message: Text(viewState.errorMessage),
+                dismissButton: .default(Text("Ok"))
+            )
         }).dialogIcon(Image("pokebola"))
     }
     
@@ -39,31 +44,47 @@ struct DetailView: View {
     
     var header: some View{
         HStack{
-            Button{
-                closeWindows.toggle()
-            }label: {
-                Image(systemName: "arrow.left").tint(.white)
-            }.padding(.leading, 16)
+            HStack{
+                Button{
+                    closeWindows.toggle()
+                }label: {
+                    Image(systemName: "arrow.left").tint(.white)
+                }
+            }
+            .padding(.leading, 16)
             Spacer()
             Header(whiteColor: true)
-            .frame(alignment: .center)
+                .padding(.leading, -45)
+                .frame(alignment: .center)
             Spacer()
-        }.padding(.top, 24)
+        }
+        .padding(.top, 24)
     }
     
     var data: some View{
         VStack{
-            Text( "#" + viewState.code)
-                .font(.custom("pokemon-emerald", size: 18)).fontWidth(.compressed)
+            HStack{
+                Text( "#" + viewState.code)
+                    .font(.custom("pokemon-emerald", size: 18)).fontWidth(.compressed)
+                    .foregroundColor(.white)
+                    .frame(width: 70, alignment: .leading)
+                    .multilineTextAlignment(.leading)
+                Button(viewState.pokemonType + " \u{1F50D}"){
+                    self.closeAndFilterByType()
+                }
+                .font(.custom("pokemon-emerald", size: 20)).bold()
                 .foregroundColor(.white)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .multilineTextAlignment(.leading)
+                .frame(width: 100, alignment: .leading)
+                .multilineTextAlignment(.center)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
             Text( viewState.name.firstCapitalized)
                 .font(.custom("pokemon-emerald", size: 32)).bold()
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .multilineTextAlignment(.leading)
-                .padding([.top], -12)
+                .padding([.top], -6)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding([.leading], 16)
@@ -71,30 +92,51 @@ struct DetailView: View {
     }
     
     var avatar: some View{
-        AsyncImage(url: URL(string: viewState.sprit ),
-                   content: { phase in
-            switch phase {
-            case .empty:
-                ProgressView()
-            case .success(let image):
-                image.resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: 300, maxHeight: 300)
-            case .failure:
-                Image(systemName: "photo")
-            @unknown default:
-                EmptyView()
-            }
-        })
+        ScrollView (.horizontal, showsIndicators: true) {
+             HStack {
+                 AsyncImage(url: URL(string: viewState.sprit ),
+                            content: { phase in
+                     switch phase {
+                     case .empty:
+                         ProgressView()
+                     case .success(let image):
+                         image.resizable()
+                             .aspectRatio(contentMode: .fit)
+                             .frame(maxWidth: 250, maxHeight: 250)
+                     case .failure:
+                         Image(systemName: "photo")
+                     @unknown default:
+                         EmptyView()
+                     }
+                 })
+                 AsyncImage(url: URL(string: viewState.spritShiny ),
+                            content: { phase in
+                     switch phase {
+                     case .empty:
+                         ProgressView()
+                     case .success(let image):
+                         image.resizable()
+                             .aspectRatio(contentMode: .fit)
+                             .frame(maxWidth: 250, maxHeight: 250)
+                     case .failure:
+                         Image(systemName: "photo")
+                     @unknown default:
+                         EmptyView()
+                     }
+                 })
+             }
+        }
         .padding([.bottom], 4)
         .padding([.leading ,.leading], 4)
+
+        
     }
     
     var stats: some View{
         VStack{
             Text( String(localized:"Stats"))
-                .font(.custom("pokemon-emerald", size: 18)).bold()
-                .foregroundColor(Color(hex: "60635e"))
+                .font(.custom("pokemon-emerald", size: 22)).bold()
+                .foregroundColor(Color(hex: viewState.viewBackgroundColor))
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding([.leading, .trailing], 16)
             Divider()
@@ -104,14 +146,17 @@ struct DetailView: View {
             List( viewState.stats ) { item in
                 HStack {
                     Text( (item.stat?.name ?? "") + ":"  )
-                        .font(.custom("pokemon-emerald", size: 12))
+                        .font(.custom("pokemon-emerald", size: 14))
                         .foregroundColor(Color(hex: "60635e"))
                     Text( String(item.baseStat ?? 0))
-                        .font(.custom("pokemon-emerald", size: 14)).bold()
-                        .foregroundColor(Color(hex: "60635e"))
-                }.listRowSeparator(.hidden)
-                    .padding([.top], -10)
-            }
+                        .font(.custom("pokemon-emerald", size: 18)).bold()
+                        .foregroundColor(Color(hex: viewState.viewBackgroundColor))
+                }
+                .listRowSeparator(.hidden)
+                .padding([.leading], -16)
+                .padding([.top], -8)
+
+            }.listRowSpacing(-8)
             .padding([.top], -30)
             .scrollDisabled(true)
             .scrollContentBackground(.hidden)
@@ -119,8 +164,16 @@ struct DetailView: View {
         }
     }
     
-    init(_ id: String, closeWindow: Binding< Bool>) {
+    private func closeAndFilterByType(){
+        DispatchQueue.main.async {
+            closeWindows.toggle()
+            pokemonTypeFilter = viewState.pokemonRawType
+        }
+    }
+    
+    init(_ id: String, closeWindow: Binding< Bool>, _ pokemonTypeFilter: Binding<PokemonType>) {
         self.viewState = DetailViewState(id)
         self._closeWindows = closeWindow
+        self._pokemonTypeFilter = pokemonTypeFilter
     }
 }

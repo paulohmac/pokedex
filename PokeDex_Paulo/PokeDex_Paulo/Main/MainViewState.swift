@@ -1,43 +1,52 @@
 import SwiftUI
 
 class MainViewState: ObservableObject {
-    private var service: PokeAPIService = PokeAPIHTTPService()
-    private var currentPage = -1
+    private var service: PokeAPIService
+    private var currentPage = -20
+    private var searchUsed = false
 
-    @Published var filter  = ""
     @Published var pokemonList  = [SearchResultItem]()
     @Published var searchTerm = ""
     @Published var hiddenLoading = 0.0
     @Published var hasError = false
-    @Published var errorMessage = "houve uma falha"
+    @Published var errorMessage = "Request failed"
+    @Published var selectedTypeColor = "63e6c6"
 
+    
+    
     @Published var showLoading  = false {
         willSet(newValue){
             hiddenLoading = newValue ? 1.0 : 0.0
-            print("***\(hiddenLoading)")
         }
     }
 
     @Published var changePage = false {
         willSet(newValue){
-            nextPage()
-        }
-    }
-    @Published var enterpressed  = false {
-        willSet(newValue){
-            if newValue {
-               searchPokemon(searchTerm)
+            if !searchUsed {
+                nextPage()
             }
         }
     }
+
+    @Published var enterpressed  = false {
+        willSet(newValue){
+            if newValue {
+                searchUsed = true
+                searchPokemon(searchTerm)
+            }
+        }
+    }
+
     @Published var currentSelection: PokemonType = .normal {
-        didSet(newValue){
+        willSet(newValue){
+            searchUsed = false
             self.pokemonList.removeAll()
             listByType(newValue.rawValue.lowercased())
         }
     }
     
-    init(){
+    init(_ pokeAPIService: PokeAPIService = PokeAPIHTTPService()){
+        self.service = pokeAPIService
     }
     
     private func searchPokemon(_ term: String) {
@@ -57,7 +66,8 @@ class MainViewState: ObservableObject {
             self.showLoading = false
             switch result {
             case .success(let pokemonRetList):
-                self.pokemonList = pokemonRetList.results ?? []
+                self.pokemonList.removeAll()
+                self.pokemonList += pokemonRetList.results ?? []
             case .failure(let error):
                 print(error)
                 self.showError(error: error)
@@ -86,6 +96,7 @@ class MainViewState: ObservableObject {
             self.showLoading = false
             switch result {
             case .success(let pokemonRetList):
+                self.selectedTypeColor = pokemonTypeColors[type.capitalized] ?? "63e6c6"
                 self.pokemonList += pokemonRetList.results ?? []
             case .failure(let error):
                 print(error)
@@ -94,13 +105,20 @@ class MainViewState: ObservableObject {
         })
     }
 
+    private func showError(error : Error){
+        self.hasError = true
+        let errorMesage = error.localizedDescription
+        self.errorMessage = errorMesage == "" ? "Houve um erro" : errorMesage
+        print(error)
+    }
+
     public func nextPage(){
-        currentPage += 1
+        currentPage += 20
         self.list()
     }
 
     public func priorPage(){
-        currentPage -= 1
+        currentPage -= 20
         
         if currentPage < 0 {
             currentPage = 0
@@ -108,12 +126,6 @@ class MainViewState: ObservableObject {
         self.list()
     }
     
-    public func showError(error : Error){
-        self.hasError = true
-        let errorMesage = error.localizedDescription
-        self.errorMessage = errorMesage == "" ? "Houve um erro" : errorMesage
-        print(error)
-    }
 }
 
 

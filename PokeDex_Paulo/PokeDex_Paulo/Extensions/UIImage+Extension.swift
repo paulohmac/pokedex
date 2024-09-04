@@ -1,10 +1,3 @@
-//
-//  UIImage+Extension.swift
-//  PokeDex_Paulo
-//
-//  Created by Paulo H.M. on 30/08/24.
-//
-
 import UIKit
 
 extension UIImage {

@@ -7,6 +7,7 @@ struct FullScreenVide: View {
     @State var opa = 0.0
     @State var opendDetail: Bool = false
     @Binding var closeWindow: Bool
+    @Binding var pokemonTypeFilter: PokemonType
     private var pub = NotificationCenter.default.publisher(for: .AVPlayerItemDidPlayToEndTime)
     private var name = ""
     @Environment(\.dismiss) private var dismiss
@@ -22,7 +23,7 @@ struct FullScreenVide: View {
                     .opacity(opa)
                 Spacer()
             } .fullScreenCover(isPresented: $opendDetail, content: {
-                DetailView(name, closeWindow: $closeWindow)
+                DetailView(name, closeWindow: $closeWindow, $pokemonTypeFilter)
             })
             
         }.onAppear{
@@ -43,9 +44,22 @@ struct FullScreenVide: View {
         })
     }
     
-    init(_ id: String, closeWindow: Binding< Bool>){
+    init(_ id: String, closeWindow: Binding< Bool>,_ pokemonTypeFilter: Binding<PokemonType>){
         name = id
         self._closeWindow = closeWindow
+        self._pokemonTypeFilter = pokemonTypeFilter
     }
 }
 
+
+struct BackgroundClearView: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        DispatchQueue.main.async {
+            view.superview?.superview?.backgroundColor = .clear
+        }
+        return view
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {}
+}

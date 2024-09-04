@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  PokeDex_Paulo
-//
-//  Created by Paulo H.M. on 24/08/24.
-//
-
 import SwiftUI
 
 struct ContentView: View {

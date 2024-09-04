@@ -41,4 +41,5 @@ public enum PokemonType: String, CaseIterable, Identifiable  {
     case unknown
     case shadow
     public var id: Self { self }
+    
 }

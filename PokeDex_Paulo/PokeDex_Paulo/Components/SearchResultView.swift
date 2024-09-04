@@ -10,6 +10,9 @@ struct SearchResultView: View {
     @Namespace private var bottomID
     @Binding var pokemonList: [SearchResultItem]
     @Binding var updateList: Bool
+    @Binding var selectedTypeColor: String
+    @Binding var selectedType: PokemonType
+
 
     var body: some View {
         ZStack{
@@ -19,7 +22,7 @@ struct SearchResultView: View {
                         columns: [GridItem(spacing: 0), GridItem(spacing: 0)],
                         spacing: 16
                     )  {
-                        ForEach(pokemonList) { pokemon in
+                        ForEach(pokemonList) {pokemon in
                             VStack {
                                 Text( pokemon.name)
                                     .font(.custom("pokemon-emerald", size: 18)).bold()
@@ -42,28 +45,31 @@ struct SearchResultView: View {
                                 .scaledToFit()
                                 .frame(width: 60, height: 60, alignment: .center)
                                 .padding(.top, -16)
+                                
                             }.onTapGesture {
                                 selection = pokemon.id
                             }
                             .frame(width: 160, height:120)
-                            .background(Color(hex: "63e6c6"))
+                            .background(Color(hex: selectedTypeColor))
                             .cornerRadius(20.0)
+                            .onAppear{
+                                if pokemon.parseCode() == pokemonList.last?.parseCode(){
+                                    updateList.toggle()
+                                    print("Carrega em nome de deus")
+                                }
+                            }
                         }
                     }
                     .onChange(of: selection) { _, newValue in
-                        let item = pokemonList.filter({$0.id == selection}).first
                         self.openMovie = true
                     } .fullScreenCover(isPresented: $openMovie, content: {
                         let item = pokemonList.filter({$0.id == selection}).first
-                        FullScreenVide(item?.name ?? "", closeWindow: $openMovie)
+                        FullScreenVide(item?.name ?? "", closeWindow: $openMovie, $selectedType)
                     })
                     Text("").id(bottomID)
                 }.onAppear(perform: {
                     proxy.scrollTo(bottomID)
                 })
-                .refreshable {
-                    updateList.toggle()
-                }
             }
         }
     }

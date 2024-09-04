@@ -16,7 +16,12 @@ struct MainView: View {
                     .onAppear{
                         viewState.nextPage()
                     }
-                    SearchResultView(pokemonList: $viewState.pokemonList, updateList: $viewState.changePage)
+                    SearchResultView(
+                        pokemonList: $viewState.pokemonList,
+                        updateList: $viewState.changePage,
+                        selectedTypeColor: $viewState.selectedTypeColor,
+                        selectedType: $viewState.currentSelection
+                    )
                 }.background(.white)
                 progressBar
             }
@@ -34,7 +39,7 @@ struct MainView: View {
                     .textCase(.lowercase)
                     .font(.custom("pokemon-emerald", size: 18))
                     .onSubmit {
-                        viewState.enterpressed.toggle()
+                        viewState.enterpressed = true
                     }
                     .background(Color(hex: "f5f5f5"))
                     .cornerRadius(15.0)
