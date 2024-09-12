@@ -128,8 +128,6 @@ struct DetailView: View {
         }
         .padding([.bottom], 4)
         .padding([.leading ,.leading], 4)
-
-        
     }
     
     var stats: some View{

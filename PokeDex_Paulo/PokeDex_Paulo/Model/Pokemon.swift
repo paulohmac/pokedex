@@ -98,7 +98,6 @@ struct SearchResultItem: Codable,Identifiable {
             }
             return ret
         }
-
     }
 
     enum CodingKeys: String, CodingKey {

@@ -13,7 +13,7 @@ final class MainViewStateUnitTest: XCTestCase {
     }
 
     func testSearchResultGivenDataReturn() throws {
-        let expectation1 = XCTestExpectation(description: "Waiting for network request")
+        let expectation1 = XCTestExpectation(description: "Waiting for server data")
         _ = sut.$pokemonList.sink { list in
             print(list.count)
             XCTAssertTrue( list.count == 1)
@@ -24,7 +24,7 @@ final class MainViewStateUnitTest: XCTestCase {
 
     func testSearchNextPageResultGivenDataReturn() throws {
        sut.nextPage()
-        let expectation1 = XCTestExpectation(description: "Waiting for network request")
+        let expectation1 = XCTestExpectation(description: "Waiting for server data")
         _ = sut.$pokemonList.sink { list in
             print(list.count)
             XCTAssertTrue( list.count == 40)

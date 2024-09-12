@@ -12,7 +12,7 @@ class PokeAPIHTTPService:  PokeAPIService{
             completion(data)
         })
     }
-
+    
     func search(search: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ()){
         switch search {
         case let .list(page):
@@ -31,7 +31,7 @@ class PokeAPIHTTPService:  PokeAPIService{
             ()
         }
     }
- 
+    
     private func searchPokemons<T: Decodable>(target: SendRequest, retType : T.Type, completion: @escaping (Result<SearchResult, Error>) -> ()) {
         var searchTerm = ""
         if case let .search(param: term) = target {
@@ -45,12 +45,12 @@ class PokeAPIHTTPService:  PokeAPIService{
                 do {
                     let data = moyaResponse.data
                     let jsonData = try JSONDecoder().decode ( Pokemon.self , from: data)
-                    let ret  = SearchResult(results: [SearchResultItem(name: (jsonData as? Pokemon)?.forms?.first?.name ?? "", url: (jsonData as? Pokemon)?.forms?.first?.url  ?? "", pokemonData: jsonData)])
+                    let ret  = SearchResult(results: [SearchResultItem(name: jsonData.forms?.first?.name ?? "", url: jsonData.forms?.first?.url  ?? "", pokemonData: jsonData)])
                     completion(.success(ret))
                 } catch{
                     if statuCode == 404 {
                         completion(.failure(ResponseError(code: 400, message: "Not found")))
-
+                        
                     }else{
                         completion(.failure(ResponseError(code: 500, message: "Error")))
                     }
@@ -60,7 +60,7 @@ class PokeAPIHTTPService:  PokeAPIService{
                 completion(.failure(error))
             }
         }
-       }
+    }
     
     private func requestByType(target: SendRequest, completion: @escaping (Result<SearchResult, Error>) -> ()) {
         var fromtype = "0"
@@ -73,7 +73,6 @@ class PokeAPIHTTPService:  PokeAPIService{
             switch result {
             case let .success(moyaResponse):
                 let data = moyaResponse.data
-                let statusCode = moyaResponse.statusCode
                 let jsonData = try! JSONDecoder().decode ( SearchByType.self , from: data)
                 completion(.success(
                     SearchResult(
@@ -81,15 +80,15 @@ class PokeAPIHTTPService:  PokeAPIService{
                             jsonData.pokemon?.map(
                                 { SearchResultItem(name: $0.pokemon?["name"]  ?? "", url: $0.pokemon?["url"] ?? "") }
                             ) ?? []
-                        )
                     )
+                )
                 )
             case let .failure(error):
                 print(error.localizedDescription)
                 completion(.failure(error))
             }
         }
-       }
+    }
     
     private func request<T: Decodable>(target: SendRequest, retType : T.Type, completion: @escaping (Result<T, Error>) -> ()) {
         var pagePosition = "0"
@@ -102,7 +101,6 @@ class PokeAPIHTTPService:  PokeAPIService{
             switch result {
             case let .success(moyaResponse):
                 let data = moyaResponse.data
-                let statusCode = moyaResponse.statusCode
                 let jsonData = try! JSONDecoder().decode ( retType.self , from: data)
                 completion(.success(jsonData))
             case let .failure(error):
@@ -110,7 +108,7 @@ class PokeAPIHTTPService:  PokeAPIService{
                 completion(.failure(error))
             }
         }
-       }
+    }
     
     private func requestDetail<T: Decodable>(target: SendRequest, retType : T.Type, completion: @escaping (Result<T, Error>) -> ()) {
         var idDetail = "0"
@@ -122,7 +120,6 @@ class PokeAPIHTTPService:  PokeAPIService{
             switch result {
             case let .success(moyaResponse):
                 let data = moyaResponse.data
-                let statusCode = moyaResponse.statusCode
                 let jsonData = try! JSONDecoder().decode ( retType.self , from: data)
                 completion(.success(jsonData))
             case let .failure(error):
@@ -130,6 +127,6 @@ class PokeAPIHTTPService:  PokeAPIService{
                 completion(.failure(error))
             }
         }
-       }
- }
+    }
+}
 

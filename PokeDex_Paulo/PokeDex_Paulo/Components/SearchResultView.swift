@@ -13,7 +13,6 @@ struct SearchResultView: View {
     @Binding var selectedTypeColor: String
     @Binding var selectedType: PokemonType
 
-
     var body: some View {
         ZStack{
             ScrollViewReader { proxy in

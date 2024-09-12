@@ -158,12 +158,12 @@
 			path = Video;
 			sourceTree = "<group>";
 		};
-		8C9A2C9D2C7F94510042328B /* fonts */ = {
+		8C9A2C9D2C7F94510042328B /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
 				8C9A2C9E2C7F94750042328B /* pokemon-emerald.ttf */,
 			);
-			path = fonts;
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		8CA7B8582C86978200107F7D /* Components */ = {
@@ -202,7 +202,7 @@
 				8CA7B85E2C86AAA900107F7D /* Localizable.xcstrings */,
 				8C9A2CA02C7F95E00042328B /* PokeDex-Paulo-Info.plist */,
 				8CA7B8582C86978200107F7D /* Components */,
-				8C9A2C9D2C7F94510042328B /* fonts */,
+				8C9A2C9D2C7F94510042328B /* Fonts */,
 				8C9A2C9A2C7EAA510042328B /* Video */,
 				8CB4AF062C7AAAEA0006FD09 /* Extensions */,
 				8CB4AF032C7A6C520006FD09 /* Model */,

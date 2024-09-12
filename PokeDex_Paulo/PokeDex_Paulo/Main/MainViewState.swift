@@ -11,8 +11,6 @@ class MainViewState: ObservableObject {
     @Published var hasError = false
     @Published var errorMessage = "Request failed"
     @Published var selectedTypeColor = "63e6c6"
-
-    
     
     @Published var showLoading  = false {
         willSet(newValue){
@@ -127,5 +125,3 @@ class MainViewState: ObservableObject {
     }
     
 }
-
-
